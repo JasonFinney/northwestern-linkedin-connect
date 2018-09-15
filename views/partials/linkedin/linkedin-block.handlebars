@@ -1,7 +1,9 @@
 <li>
     {{name}}
-    {{url}}
+
     <button class="change-entered" data-id="{{id}}" data-newentered="{{entered}}">
         {{#if entered}} ☑ {{else}}Please enter link{{/if}}
     </button>
+
+    <a href={{url}}></a>
 </li>
