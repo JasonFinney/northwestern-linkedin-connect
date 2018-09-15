@@ -7,6 +7,7 @@ CREATE TABLE linkedin
     url VARCHAR
     (200) NOT NULL,
     entered BOOLEAN DEFAULT false,
+    createdAT timestamp not null default current_timestamp,
     PRIMARY KEY
     (id)
 );
