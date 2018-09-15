@@ -1,4 +1,3 @@
-// Import MySQL connection.
 var connection = require("../config/connection.js");
 
 // Helper function for SQL syntax.
@@ -39,7 +38,6 @@ function objToSql(ob) {
     return arr.toString();
 }
 
-// Object for all our SQL statement functions.
 var orm = {
     all: function (tableInput, cb) {
         var queryString = "SELECT * FROM " + tableInput + ";";
@@ -50,19 +48,21 @@ var orm = {
             cb(result);
         });
     },
-    create: function (table, cols, vals, cb) {
+    create: function (table, cols, val1, val2, cb) {
         var queryString = "INSERT INTO " + table;
 
         queryString += " (";
         queryString += cols.toString();
         queryString += ") ";
         queryString += "VALUES (";
-        queryString += printQuestionMarks(vals.length);
+        queryString += printQuestionMarks(val1.length);
+        queryString += ", ";
+        queryString += printQuestionMarks(val2.length);
         queryString += ") ";
 
         console.log(queryString);
 
-        connection.query(queryString, vals, function (err, result) {
+        connection.query(queryString, [{ val1 }, { val2 }], function (err, result) {
             if (err) {
                 throw err;
             }
@@ -70,7 +70,6 @@ var orm = {
             cb(result);
         });
     },
-    // An example of objColVals would be {name: panther, sleepy: true}
     update: function (table, objColVals, condition, cb) {
         var queryString = "UPDATE " + table;
 
@@ -88,20 +87,6 @@ var orm = {
             cb(result);
         });
     },
-    delete: function (table, condition, cb) {
-        var queryString = "DELETE FROM " + table;
-        queryString += " WHERE ";
-        queryString += condition;
-
-        connection.query(queryString, function (err, result) {
-            if (err) {
-                throw err;
-            }
-
-            cb(result);
-        });
-    }
 };
 
-// Export the orm object for the model (cat.js).
 module.exports = orm;

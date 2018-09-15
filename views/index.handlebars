@@ -30,13 +30,52 @@
     <div class="form-group">
         <label for="ca">Student Name:</label>
         <input type="text" id="ca" name="name">
-    </div>
-
-    <div class="form-group">
-        <label for="sleepy">Entered?</label><br>
-        <input type="radio" name="entered" value="1" checked> Entered!<br>
-        <input type="radio" name="entered" value="0"> Awake
+        <label for="ca1">LinkedIn Link:</label>
+        <input type="text" id="ca1" name="url">
     </div>
 
     <button type="submit">Add Student</button>
 </form>
+
+<script>
+    $(function () {
+        $(".change-entered").on("click", function (event) {
+            var id = $(this).data("id");
+            var newEntered = $(this).data("newentered");
+
+            var newEnteredState = {
+                entered: newEntered
+            };
+
+            $.ajax("/api/linkedin/" + id, {
+                type: "PUT",
+                data: newEnteredState
+            }).then(
+                function () {
+                    console.log("changed entered to", newEntered);
+                    location.reload();
+                }
+            );
+        });
+
+        $(".create-form").on("submit", function (event) {
+            event.preventDefault();
+
+            var newStudent = {
+                name: $("#ca").val().trim(),
+                url: $("#ca1").val().trim(),
+                entered: true
+            };
+
+            $.ajax("/api/linkedin", {
+                type: "POST",
+                data: newStudent
+            }).then(
+                function () {
+                    console.log("created new Student");
+                    location.reload();
+                }
+            );
+        });
+    });
+</script>
